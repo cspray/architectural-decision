@@ -2,8 +2,12 @@
 
 namespace Cspray\ArchitecturalDecision;
 
+use Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\ExplicitArchitecturalDecisionStatus;
+use Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\PreferCustomArchitecturalDecisionOverGeneric;
 use Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\UsingAttributesForArchitecturalDecisions;
 
+#[ExplicitArchitecturalDecisionStatus]
+#[PreferCustomArchitecturalDecisionOverGeneric]
 #[UsingAttributesForArchitecturalDecisions]
 interface ArchitecturalDecisionRecord {
 

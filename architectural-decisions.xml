@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <architecturalDecisions xmlns="https://architectural-decision.cspray.io/schema/architectural-decision.xsd">
   <architecturalDecision>
+    <attribute>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\ExplicitArchitecturalDecisionStatus</attribute>
+    <title>Explicit Architectural Decision Status</title>
+    <date>2022-07-19</date>
+    <status>Accepted</status>
+    <contents><![CDATA[An explicit status should be provided for each ArchitecturalDecisionRecord instead of relying on an implicit status,
+e.g. the presence of the ADR in your project's main branch.
+
+## Problem Description
+
+As a developer I would like for the inclusion of my ADR in a default branch, or some other by-convention mechanism, to
+implicitly determine that ADR's status.
+
+## Decision
+
+Some libraries may be able to take advantage of an implicit, by-convention approach to statuses. If possible, it is
+encouraged to do so by implementing your own abstract ArchitecturalDecisionRecord that defines the statuses for all
+decisions according to your conventions.
+
+Other projects might require more complete processes around the status of a decision. For example, a 'Draft - Working'
+status for complex decisions to see how they impact the codebase and team over time. Previously 'Accepted' decisions
+could become 'Deprecated' or 'Rejected' outright. In those situations leaving the decision in place, while removing
+annotations using the Attribute, could be the preferred approach. This way, why the previously accepted decision is
+no longer valid stays in the history of the codebase instead of being removed. Or, perhaps you use the 'Deprecated'
+status of the decision to find code locations that are in need of refactoring.
+
+Requiring an explicit status enables both workflows; having an implicit status is still supported by providing your
+own implementation logic and explicit statuses are also supported. Only having an implicit status would not allow
+for both workflows.]]></contents>
+    <codeAnnotations>
+      <codeAnnotation>
+        <class>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecord</class>
+      </codeAnnotation>
+    </codeAnnotations>
+  </architecturalDecision>
+  <architecturalDecision>
     <attribute>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\UsingAttributesForArchitecturalDecisions</attribute>
     <title>Use Attributes for Architectural Decision Records</title>
     <date>2022-07-19</date>
@@ -8,6 +43,51 @@
     <contents><![CDATA[Architectural Decision Records (ADR) can be useful in determining why a piece of software is the way it is. While
 these type of documents can live anywhere, an Attribute in your codebase can be a good place to store this info.
 For more information, please check out the README in this repo or at https://github.com/cspray/architectural-decision]]></contents>
+    <codeAnnotations>
+      <codeAnnotation>
+        <class>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecord</class>
+      </codeAnnotation>
+    </codeAnnotations>
+  </architecturalDecision>
+  <architecturalDecision>
+    <attribute>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\PreferCustomArchitecturalDecisionOverGeneric</attribute>
+    <title>Prefer Custom Attributes Over Generic</title>
+    <date>2022-07-19</date>
+    <status>Accepted</status>
+    <contents><![CDATA[It is preferred to create a custom Attribute per decision over implementing a generic Attribute to handle many
+decisions.
+
+## Problem Description
+
+As a developer using Architectural Decision I would like to use a generic Attribute to define an Architectural Decision
+Record instead of having to implement a custom Attribute unique to each decision.
+
+## Decision
+
+One of the earliest decisions in the design of this library was to have the supported use case be a custom Attribute
+per ADR and to discourage the use of a generic attribute, e.g. #[ADR('Title', '2022-07-19', 'Reasoning')]. On the
+surface a generic Attribute has some advantages, there are also drawbacks that make them a poor solution for what
+this library is trying to accomplish. Specifically, I identify 3 problems with the generic Attribute approach.
+
+1. Generic Attributes increase the likelihood that you'll have to repeat information and that errors/typos are
+introduced. If you use a generic Attribute then every place that you use that Attribute in your codebase must also
+include all the relevant information. This could easily turn problematic if the same ADR has different state in each
+place it is attributed. The decision details should be documented in one, canonical place and not spread across your
+codebase.
+
+2. Generic Attributes do not facilitate static analysis. Having an explicit type for each decision allows for static
+analysis tools to more easily infer information about each use of the Attribute. A generic Attribute for all decisions
+would lose the ability to infer this information as you're now much more dependent on the value of the Attribute
+instead of the type to infer which decision it refers to.
+
+3. Generic Attributes require more information to construct them correctly. This concern is meant to address a specific
+technical limitation and/or requirement. We cannot rely strictly on an Attribute instance to know what ADR are available
+and to generate information about them. For example, you introduce an ADR but do not add a corresponding Attribute
+annotation anywhere. In this case there's no Attribute instance to gather but the decision should still be listed in
+the generated XML document, simply with no <codeAnnotations></codeAnnotations> element present. This is a valid use
+case and should be supported out-the-box. This limitation could be partly lifted from a technical level by introducing
+a factory to create an ArchitecturalDecisionRecord instead of relying on a dependency-free constructor. However, with
+the other limitations facing a generic Attribute approach I'd rather encourage following conventions.]]></contents>
     <codeAnnotations>
       <codeAnnotation>
         <class>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecord</class>
