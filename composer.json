@@ -2,6 +2,7 @@
   "name": "cspray/architectural-decision",
   "description": "A library to keep track of architectural decisions with PHP annotations.",
   "license": ["MIT"],
+  "bin": ["bin/architectural-decisions"],
   "autoload": {
     "psr-4": {
       "Cspray\\ArchitecturalDecision\\": "src"
