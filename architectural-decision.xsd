@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema
+    xml:lang="en"
+    version="1.0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="https://architectural-decision.cspray.io/schema/architectural-decision.xsd"
+    elementFormDefault="qualified"
+    attributeFormDefault="qualified"
+    targetNamespace="https://architectural-decision.cspray.io/schema/architectural-decision.xsd">
+
+  <xs:element name="architecturalDecisions" type="architecturalDecisionsType">
+    <xs:annotation>
+      <xs:documentation>
+
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+  <xs:complexType name="architecturalDecisionsType">
+    <xs:sequence minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="architecturalDecision" type="architecturalDecisionType" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="architecturalDecisionType">
+    <xs:all>
+      <xs:element name="attribute" type="xs:token" minOccurs="1" maxOccurs="1" />
+      <xs:element name="title" type="xs:token" minOccurs="1" maxOccurs="1" />
+      <xs:element name="date" type="xs:date" minOccurs="1" maxOccurs="1" />
+      <xs:element name="contents" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="codeAnnotations" type="codeAnnotationsType" minOccurs="0" maxOccurs="1" />
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="codeAnnotationsType">
+    <xs:sequence minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="codeAnnotation" type="codeTargetType" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="codeTargetType">
+    <xs:choice minOccurs="1" maxOccurs="1">
+      <xs:element name="class" type="xs:token" />
+      <xs:element name="classMethod" type="classMethodType" />
+      <xs:element name="classProperty" type="classPropertyType" />
+      <xs:element name="classConstant" type="classConstantType" />
+      <xs:element name="classMethodParameter" type="classMethodParameterType" />
+      <xs:element name="function" type="xs:token" />
+      <xs:element name="functionParameter" type="functionParameterType" />
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="classMethodType">
+    <xs:all>
+      <xs:element name="class" type="xs:token" />
+      <xs:element name="method" type="xs:token" />
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="classPropertyType">
+    <xs:all>
+      <xs:element name="class" type="xs:token" />
+      <xs:element name="property" type="xs:token" />
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="classConstantType">
+    <xs:all>
+      <xs:element name="class" type="xs:token" />
+      <xs:element name="constant" type="xs:token" />
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="classMethodParameterType">
+    <xs:all>
+      <xs:element name="class" type="xs:token" />
+      <xs:element name="method" type="xs:token" />
+      <xs:element name="parameter" type="xs:token" />
+    </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="functionParameterType">
+    <xs:all>
+      <xs:element name="function" type="xs:token" />
+      <xs:element name="parameter" type="xs:token" />
+    </xs:all>
+  </xs:complexType>
+</xs:schema>

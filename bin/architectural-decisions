@@ -1,0 +1,57 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+use Cspray\AnnotatedTarget\PhpParserAnnotatedTargetParser;
+use Cspray\ArchitecturalDecision\ArchitecturalDecisionAttributeGatherer;
+use Cspray\ArchitecturalDecision\SourceArchitecturalDecisionAttributeRegistry;
+use Cspray\ArchitecturalDecision\XmlDocumentGenerator;
+
+$rootDir = dirname(__DIR__);
+if (!file_exists($rootDir . '/vendor/autoload.php')) {
+    $rootDir = dirname(__DIR__, 5);
+}
+
+require $rootDir . '/vendor/autoload.php';
+
+$composerJson = $rootDir . '/composer.json';
+if (!file_exists($composerJson)) {
+    echo 'Unable to determine directories to scan. Please ensure your composer.json exists in the root of your project.';
+    exit(255);
+}
+
+$composer = json_decode(file_get_contents($composerJson), true);
+
+$autoloadPsr0 = $composer['autoload']['psr-0'] ?? [];
+$autoloadPsr4 = $composer['autoload']['psr-4'] ?? [];
+
+$composerDirs = [
+    ...$autoloadPsr0,
+    ...$autoloadPsr4
+];
+$paths = [];
+
+foreach (new RecursiveIteratorIterator(new RecursiveArrayIterator($composerDirs)) as $composerDir) {
+    $paths[] = $rootDir . '/' . $composerDir;
+}
+
+$attributes = (new SourceArchitecturalDecisionAttributeRegistry($paths))->getArchitecturalDecisionAttributes();
+if (count($attributes) === 0) {
+    echo 'You must implement an ArchitecturalDecisionRecord in your codebase before running this command!';
+    exit(255);
+}
+
+$gatherer = new ArchitecturalDecisionAttributeGatherer(new PhpParserAnnotatedTargetParser());
+foreach ($attributes as $attribute) {
+    $gatherer->registerAttribute($attribute->getName());
+}
+
+if (file_exists($rootDir . '/architectural-decisions.xml')) {
+    unlink($rootDir . '/architectural-decisions.xml');
+}
+
+$xmlGenerator = new XmlDocumentGenerator($gatherer);
+$xmlGenerator->generateDocument($rootDir . '/architectural-decisions.xml', $paths);
+
+echo 'Successfully parsed your codebase for ADR Attributes.', PHP_EOL;
+
+
