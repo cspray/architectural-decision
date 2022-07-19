@@ -15,4 +15,8 @@ final class MissingDocBlockArchitecturalDecision extends DocBlockArchitecturalDe
     public function getDate() : string {
         return '2016-01-01';
     }
+
+    public function getStatus() : string {
+        return 'Rejected';
+    }
 }

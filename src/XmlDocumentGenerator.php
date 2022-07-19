@@ -68,6 +68,10 @@ final class XmlDocumentGenerator {
                 $dom->createElementNS(self::SCHEMA, 'date', $attribute->getDate())
             );
 
+            $decisionNode->appendChild(
+                $dom->createElementNS(self::SCHEMA, 'status', $attribute->getStatus())
+            );
+
             $contentsNode = $decisionNode->appendChild(
                 $dom->createElementNS(self::SCHEMA, 'contents')
             );

@@ -19,4 +19,8 @@ final class UsingAttributesForArchitecturalDecisions extends DocBlockArchitectur
     public function getDate() : string {
         return '2022-07-19';
     }
+
+    public function getStatus() : string {
+        return 'Accepted';
+    }
 }

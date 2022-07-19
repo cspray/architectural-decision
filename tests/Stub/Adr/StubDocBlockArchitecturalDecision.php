@@ -21,4 +21,8 @@ final class StubDocBlockArchitecturalDecision extends DocBlockArchitecturalDecis
     public function getDate() : string {
         return '2022-01-01';
     }
+
+    public function getStatus() : string {
+        return 'Accepted';
+    }
 }

@@ -11,6 +11,8 @@ interface ArchitecturalDecisionRecord {
 
     public function getDate() : string;
 
+    public function getStatus() : string;
+
     public function getContents() : string;
 
 }

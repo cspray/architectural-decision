@@ -36,6 +36,7 @@ final class XmlDocumentGeneratorTest extends TestCase {
     <attribute>Cspray\ArchitecturalDecision\Stub\Adr\StubDocBlockArchitecturalDecision</attribute>
     <title>Stub Title</title>
     <date>2022-01-01</date>
+    <status>Accepted</status>
     <contents><![CDATA[This is a DocBlock explaining an architectural decision.
 
 This is the content that should be returned from DocBlockArchitecturalDecision::getContents. It will be what is
@@ -97,6 +98,7 @@ XML;
     <attribute>Cspray\ArchitecturalDecision\Stub\Adr\StubDocBlockArchitecturalDecision</attribute>
     <title>Stub Title</title>
     <date>2022-01-01</date>
+    <status>Accepted</status>
     <contents><![CDATA[This is a DocBlock explaining an architectural decision.
 
 This is the content that should be returned from DocBlockArchitecturalDecision::getContents. It will be what is

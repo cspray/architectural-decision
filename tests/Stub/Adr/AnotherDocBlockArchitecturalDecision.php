@@ -18,4 +18,8 @@ final class AnotherDocBlockArchitecturalDecision extends DocBlockArchitecturalDe
     public function getDate() : string {
         return '1984-01-01';
     }
+
+    public function getStatus() : string {
+        return 'Draft';
+    }
 }
