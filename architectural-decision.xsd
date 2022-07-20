@@ -28,6 +28,7 @@
       <xs:element name="status" type="xs:token" minOccurs="1" maxOccurs="1" />
       <xs:element name="contents" type="xs:string" minOccurs="1" maxOccurs="1" />
       <xs:element name="codeAnnotations" type="codeAnnotationsType" minOccurs="0" maxOccurs="1" />
+      <xs:element name="meta" type="metaType" minOccurs="1" maxOccurs="1" />
     </xs:all>
     <xs:attribute name="id" type="xs:ID" use="required" />
     <xs:attribute name="attribute" type="xs:token" use="required" />
@@ -85,5 +86,11 @@
       <xs:element name="function" type="xs:token" />
       <xs:element name="parameter" type="xs:token" />
     </xs:all>
+  </xs:complexType>
+
+  <xs:complexType name="metaType">
+    <xs:sequence>
+      <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
   </xs:complexType>
 </xs:schema>

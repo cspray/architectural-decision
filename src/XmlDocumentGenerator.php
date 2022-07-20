@@ -12,8 +12,6 @@ use ReflectionProperty;
 
 final class XmlDocumentGenerator {
 
-    private const SCHEMA = 'https://architectural-decision.cspray.io/schema/architectural-decision.xsd';
-
     public function __construct(
         private readonly ArchitecturalDecisionAttributeGatherer $gatherer
     ) {}
@@ -28,9 +26,10 @@ final class XmlDocumentGenerator {
         $decisionAnnotations = [];
 
         foreach ($this->gatherer->getRegisteredAttributes() as $attributeType) {
+            /** @psalm-var class-string $type */
             $type = $attributeType->getName();
             $decisionAnnotations[$type] = [
-                'attribute' => new $type(),
+                'attribute' => (new ReflectionClass($type))->newInstance(),
                 'targets' => []
             ];
         }
@@ -45,7 +44,7 @@ final class XmlDocumentGenerator {
         $dom->formatOutput = true;
 
         $decisionsNode = $dom->appendChild(
-            $dom->createElementNS(self::SCHEMA, 'architecturalDecisions')
+            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'architecturalDecisions')
         );
 
         foreach ($decisionAnnotations as $decisionAnnotation) {
@@ -53,14 +52,14 @@ final class XmlDocumentGenerator {
             $attribute = $decisionAnnotation['attribute'];
 
             $decisionsNode->appendChild(
-                $decisionElement = $dom->createElementNS(self::SCHEMA, 'architecturalDecision')
+                $decisionElement = $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'architecturalDecision')
             );
 
             $decisionElement->setAttribute('id', $attribute->getId());
             $decisionElement->setAttribute('attribute', $attribute::class);
 
             $decisionElement->appendChild(
-                $dom->createElementNS(self::SCHEMA, 'date', $attribute->getDate())
+                $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'date', $attribute->getDate())
             );
 
             $status = $attribute->getStatus();
@@ -68,11 +67,11 @@ final class XmlDocumentGenerator {
                 $status = $status->value;
             }
             $decisionElement->appendChild(
-                $dom->createElementNS(self::SCHEMA, 'status', $status)
+                $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'status', $status)
             );
 
             $contentsNode = $decisionElement->appendChild(
-                $dom->createElementNS(self::SCHEMA, 'contents')
+                $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'contents')
             );
 
             assert(!is_null($contentsNode->ownerDocument));
@@ -82,79 +81,85 @@ final class XmlDocumentGenerator {
 
             if (!empty($decisionAnnotation['targets'])) {
                 $codeAnnotationsNode = $decisionElement->appendChild(
-                    $dom->createElementNS(self::SCHEMA, 'codeAnnotations')
+                    $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'codeAnnotations')
                 );
 
                 foreach ($decisionAnnotation['targets'] as $target) {
                     $annotationNode = $codeAnnotationsNode->appendChild(
-                        $dom->createElementNS(self::SCHEMA, 'codeAnnotation')
+                        $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'codeAnnotation')
                     );
 
                     $targetReflection = $target->getTargetReflection();
                     if ($targetReflection instanceof ReflectionClass) {
                         $annotationNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'class', $targetReflection->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'class', $targetReflection->getName())
                         );
                     } else if ($targetReflection instanceof ReflectionClassConstant) {
                         $classConstantNode = $annotationNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'classConstant')
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'classConstant')
                         );
                         $classConstantNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'class', $targetReflection->getDeclaringClass()->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'class', $targetReflection->getDeclaringClass()->getName())
                         );
                         $classConstantNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'constant', $targetReflection->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'constant', $targetReflection->getName())
                         );
                     } else if ($targetReflection instanceof ReflectionProperty) {
                         $classPropertyNode = $annotationNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'classProperty')
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'classProperty')
                         );
                         $classPropertyNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'class', $targetReflection->getDeclaringClass()->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'class', $targetReflection->getDeclaringClass()->getName())
                         );
                         $classPropertyNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'property', $targetReflection->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'property', $targetReflection->getName())
                         );
                     } else if ($targetReflection instanceof ReflectionMethod) {
                         $classMethodNode = $annotationNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'classMethod')
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'classMethod')
                         );
                         $classMethodNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'class', $targetReflection->getDeclaringClass()->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'class', $targetReflection->getDeclaringClass()->getName())
                         );
                         $classMethodNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'method', $targetReflection->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'method', $targetReflection->getName())
                         );
                     } else if ($targetReflection instanceof ReflectionParameter && $targetReflection->getDeclaringClass() !== null) {
                         $classMethodParameterNode = $annotationNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'classMethodParameter')
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'classMethodParameter')
                         );
                         $classMethodParameterNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'class', $targetReflection->getDeclaringClass()->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'class', $targetReflection->getDeclaringClass()->getName())
                         );
                         $classMethodParameterNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'method', $targetReflection->getDeclaringFunction()->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'method', $targetReflection->getDeclaringFunction()->getName())
                         );
                         $classMethodParameterNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'parameter', $targetReflection->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'parameter', $targetReflection->getName())
                         );
                     } else if ($targetReflection instanceof ReflectionParameter) {
                         $functionParameterNode = $annotationNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'functionParameter')
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'functionParameter')
                         );
                         $functionParameterNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'function', $targetReflection->getDeclaringFunction()->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'function', $targetReflection->getDeclaringFunction()->getName())
                         );
                         $functionParameterNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'parameter', $targetReflection->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'parameter', $targetReflection->getName())
                         );
                     } else {
                         $annotationNode->appendChild(
-                            $dom->createElementNS(self::SCHEMA, 'function', $targetReflection->getName())
+                            $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'function', $targetReflection->getName())
                         );
                     }
                 }
             }
+
+            $decisionElement->appendChild(
+                $meta = $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'meta')
+            );
+
+            $attribute->setMetaData($meta);
         }
 
         $dom->schemaValidate(dirname(__DIR__) . '/architectural-decision.xsd');

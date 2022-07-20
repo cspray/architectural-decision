@@ -23,8 +23,12 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <directory>src/ArchitecturalDecisionRecords</directory>
+        </exclude>
         <report>
             <text outputFile="php://stdout" showOnlySummary="true" />
+            <html outputDirectory="build" />
         </report>
     </coverage>
 </phpunit>

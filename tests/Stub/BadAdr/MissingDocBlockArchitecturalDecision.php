@@ -8,10 +8,6 @@ use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 #[Attribute(Attribute::TARGET_ALL)]
 final class MissingDocBlockArchitecturalDecision extends DocBlockArchitecturalDecision {
 
-    public function getId() : string {
-        return 'Missing DocBlock';
-    }
-
     public function getDate() : string {
         return '2016-01-01';
     }

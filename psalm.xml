@@ -21,11 +21,6 @@
         <directory name="tests"/>
       </errorLevel>
     </PropertyNotSetInConstructor>
-    <InvalidStringClass>
-      <errorLevel type="suppress">
-        <file name="src/XmlDocumentGenerator.php" />
-      </errorLevel>
-    </InvalidStringClass>
   </issueHandlers>
   <plugins>
     <pluginClass class="Cspray\Phinal\Plugin"/>

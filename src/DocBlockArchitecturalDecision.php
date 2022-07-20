@@ -3,6 +3,7 @@
 namespace Cspray\ArchitecturalDecision;
 
 use Cspray\ArchitecturalDecision\Exception\MissingDocBlock;
+use DOMElement;
 
 abstract class DocBlockArchitecturalDecision implements ArchitecturalDecisionRecord {
 
@@ -34,5 +35,9 @@ abstract class DocBlockArchitecturalDecision implements ArchitecturalDecisionRec
         }
 
         return $this->contents;
+    }
+
+    public function setMetaData(DOMElement $meta) : void {
+        // noop, override to set your custom meta data
     }
 }

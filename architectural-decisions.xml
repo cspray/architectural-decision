@@ -34,6 +34,7 @@ for both workflows.]]></contents>
         <class>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecord</class>
       </codeAnnotation>
     </codeAnnotations>
+    <meta/>
   </architecturalDecision>
   <architecturalDecision id="UsingAttributesForArchitecturalDecisions" attribute="Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\UsingAttributesForArchitecturalDecisions">
     <date>2022-07-19</date>
@@ -48,6 +49,7 @@ For more information, please check out the README in this repo or at https://git
         <class>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecord</class>
       </codeAnnotation>
     </codeAnnotations>
+    <meta/>
   </architecturalDecision>
   <architecturalDecision id="PreferCustomArchitecturalDecisionOverGeneric" attribute="Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\PreferCustomArchitecturalDecisionOverGeneric">
     <date>2022-07-19</date>
@@ -131,5 +133,6 @@ https://github.com/cspray/architectural-decision.]]></contents>
         <class>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecord</class>
       </codeAnnotation>
     </codeAnnotations>
+    <meta/>
   </architecturalDecision>
 </architecturalDecisions>

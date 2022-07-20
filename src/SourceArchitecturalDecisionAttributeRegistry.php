@@ -67,10 +67,8 @@ final class SourceArchitecturalDecisionAttributeRegistry implements Architectura
                 }
 
                 $statements = $this->parser->parse(file_get_contents($file->getPathname()));
-                if (!isset($statements)) {
-                    continue;
-                }
 
+                assert(is_array($statements));
                 $nodeTraverser->traverse($statements);
                 unset($statements);
             }

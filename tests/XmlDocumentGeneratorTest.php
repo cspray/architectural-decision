@@ -4,6 +4,7 @@ namespace Cspray\ArchitecturalDecision;
 
 use Cspray\AnnotatedTarget\PhpParserAnnotatedTargetParser;
 use Cspray\ArchitecturalDecision\Stub\Adr\StubDocBlockArchitecturalDecision;
+use Cspray\ArchitecturalDecision\Stub\Adr\StubMetaDataArchitecturalDecision;
 use org\bovigo\vfs\vfsStream as VirtualFilesystem;
 use org\bovigo\vfs\vfsStreamDirectory as VirtualDirectory;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,7 @@ final class XmlDocumentGeneratorTest extends TestCase {
 
     private VirtualDirectory $vfs;
 
+    private ArchitecturalDecisionAttributeGatherer $gatherer;
     private XmlDocumentGenerator $subject;
 
     protected function setUp() : void {
@@ -24,13 +26,13 @@ final class XmlDocumentGeneratorTest extends TestCase {
         $this->vfs = VirtualFilesystem::setup();
 
         $this->subject = new XmlDocumentGenerator(
-            $gatherer = new ArchitecturalDecisionAttributeGatherer(new PhpParserAnnotatedTargetParser())
+            $this->gatherer = new ArchitecturalDecisionAttributeGatherer(new PhpParserAnnotatedTargetParser())
         );
 
-        $gatherer->registerAttribute(StubDocBlockArchitecturalDecision::class);
     }
 
     public function testGenerateXmlDocument() : void {
+        $this->gatherer->registerAttribute(StubDocBlockArchitecturalDecision::class);
         $expected = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <architecturalDecisions xmlns="https://architectural-decision.cspray.io/schema/architectural-decision.xsd">
@@ -80,6 +82,7 @@ displayed in the CLI tool explaining the reason for the Architectural Decision.]
         </functionParameter>
       </codeAnnotation>
     </codeAnnotations>
+    <meta/>
   </architecturalDecision>
 </architecturalDecisions>
 
@@ -91,6 +94,7 @@ XML;
     }
 
     public function testCodebaseWithOnlyRecordsAndNoAnnotations() : void {
+        $this->gatherer->registerAttribute(StubDocBlockArchitecturalDecision::class);
         $expected = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <architecturalDecisions xmlns="https://architectural-decision.cspray.io/schema/architectural-decision.xsd">
@@ -101,11 +105,44 @@ XML;
 
 This is the content that should be returned from DocBlockArchitecturalDecision::getContents. It will be what is
 displayed in the CLI tool explaining the reason for the Architectural Decision.]]></contents>
+    <meta/>
   </architecturalDecision>
 </architecturalDecisions>
 
 XML;
         $this->subject->generateDocument('vfs://root/architectural-decisions.xml', [__DIR__ . '/Fixture/NoAttributes']);
+
+        self::assertStringEqualsFile('vfs://root/architectural-decisions.xml', $expected);
+    }
+
+    public function testCodebaseWithMetaLoadingAttribute() : void {
+        $this->gatherer->registerAttribute(StubMetaDataArchitecturalDecision::class);
+        $expected = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<architecturalDecisions xmlns="https://architectural-decision.cspray.io/schema/architectural-decision.xsd">
+  <architecturalDecision id="StubMetaDataArchitecturalDecision" attribute="Cspray\ArchitecturalDecision\Stub\Adr\StubMetaDataArchitecturalDecision">
+    <date>2022-07-20</date>
+    <status>Draft</status>
+    <contents><![CDATA[I load meta data.]]></contents>
+    <codeAnnotations>
+      <codeAnnotation>
+        <class>Cspray\ArchitecturalDecision\Fixture\MetaDataLoading\DataLoading</class>
+      </codeAnnotation>
+    </codeAnnotations>
+    <meta>
+      <foo>
+        <bar>baz</bar>
+      </foo>
+      <baz>
+        <qux>code it is</qux>
+      </baz>
+    </meta>
+  </architecturalDecision>
+</architecturalDecisions>
+
+XML;
+
+        $this->subject->generateDocument('vfs://root/architectural-decisions.xml', [__DIR__ . '/Fixture/MetaDataLoading']);
 
         self::assertStringEqualsFile('vfs://root/architectural-decisions.xml', $expected);
     }
