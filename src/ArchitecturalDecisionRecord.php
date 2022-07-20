@@ -11,11 +11,11 @@ use Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\UsingAttributesFor
 #[UsingAttributesForArchitecturalDecisions]
 interface ArchitecturalDecisionRecord {
 
-    public function getTitle() : string;
+    public function getId() : string;
 
     public function getDate() : string;
 
-    public function getStatus() : string;
+    public function getStatus() : string|DecisionStatus;
 
     public function getContents() : string;
 

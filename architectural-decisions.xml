@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <architecturalDecisions xmlns="https://architectural-decision.cspray.io/schema/architectural-decision.xsd">
-  <architecturalDecision>
-    <attribute>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\ExplicitArchitecturalDecisionStatus</attribute>
-    <title>Explicit Architectural Decision Status</title>
+  <architecturalDecision id="ExplicitArchitecturalDecisionStatus" attribute="Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\ExplicitArchitecturalDecisionStatus">
     <date>2022-07-19</date>
     <status>Accepted</status>
-    <contents><![CDATA[An explicit status should be provided for each ArchitecturalDecisionRecord instead of relying on an implicit status,
+    <contents><![CDATA[# Explicit Architectural Decision Status
+
+An explicit status should be provided for each ArchitecturalDecisionRecord instead of relying on an implicit status,
 e.g. the presence of the ADR in your project's main branch.
 
 ## Problem Description
@@ -35,12 +35,12 @@ for both workflows.]]></contents>
       </codeAnnotation>
     </codeAnnotations>
   </architecturalDecision>
-  <architecturalDecision>
-    <attribute>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\UsingAttributesForArchitecturalDecisions</attribute>
-    <title>Use Attributes for Architectural Decision Records</title>
+  <architecturalDecision id="UsingAttributesForArchitecturalDecisions" attribute="Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\UsingAttributesForArchitecturalDecisions">
     <date>2022-07-19</date>
     <status>Accepted</status>
-    <contents><![CDATA[Architectural Decision Records (ADR) can be useful in determining why a piece of software is the way it is. While
+    <contents><![CDATA[# Use Attributes for Architectural Decisions
+
+Architectural Decision Records (ADR) can be useful in determining why a piece of software is the way it is. While
 these type of documents can live anywhere, an Attribute in your codebase can be a good place to store this info.
 For more information, please check out the README in this repo or at https://github.com/cspray/architectural-decision]]></contents>
     <codeAnnotations>
@@ -49,12 +49,12 @@ For more information, please check out the README in this repo or at https://git
       </codeAnnotation>
     </codeAnnotations>
   </architecturalDecision>
-  <architecturalDecision>
-    <attribute>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\PreferCustomArchitecturalDecisionOverGeneric</attribute>
-    <title>Prefer Custom Attributes Over Generic</title>
+  <architecturalDecision id="PreferCustomArchitecturalDecisionOverGeneric" attribute="Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\PreferCustomArchitecturalDecisionOverGeneric">
     <date>2022-07-19</date>
     <status>Accepted</status>
-    <contents><![CDATA[It is preferred to create a custom Attribute per decision over implementing a generic Attribute to handle many
+    <contents><![CDATA[# Prefer Custom ArchitecturalDecisionRecord Over Generic
+
+It is preferred to create a custom Attribute per decision over implementing a generic Attribute to handle many
 decisions.
 
 ## Problem Description
@@ -80,14 +80,52 @@ analysis tools to more easily infer information about each use of the Attribute.
 would lose the ability to infer this information as you're now much more dependent on the value of the Attribute
 instead of the type to infer which decision it refers to.
 
-3. Generic Attributes require more information to construct them correctly. This concern is meant to address a specific
-technical limitation and/or requirement. We cannot rely strictly on an Attribute instance to know what ADR are available
-and to generate information about them. For example, you introduce an ADR but do not add a corresponding Attribute
-annotation anywhere. In this case there's no Attribute instance to gather but the decision should still be listed in
-the generated XML document, simply with no <codeAnnotations></codeAnnotations> element present. This is a valid use
-case and should be supported out-the-box. This limitation could be partly lifted from a technical level by introducing
-a factory to create an ArchitecturalDecisionRecord instead of relying on a dependency-free constructor. However, with
-the other limitations facing a generic Attribute approach I'd rather encourage following conventions.]]></contents>
+3. This library cannot rely strictly on Reflection to retrieve an Attribute instance and must be able to construct
+an Attribute type without it being used in the codebase. To understand this restriction let's look at how you would
+typically get an instance of an Attribute that's been annotated on a class. Given the following code example:
+
+<code>
+#[Attribute]
+class SomeAttribute {
+
+public function __construct(
+public readonly string $foo,
+public readonly string $bar
+) {}
+
+}
+
+#[SomeAttribute('baz', 'qux')]
+class SomeClass {
+
+}
+</code>
+
+
+To retrieve the instance of SomeAttribute that has 'baz' and 'qux' stored in the attribute's state we'd have to run
+code that resembles the following:
+
+<code>
+$reflection = new ReflectionClass(SomeClass::class);
+$reflectionAttribute = $reflection->getAttributes(SomeAttribute::class)[0];
+$instance = $reflectionAttribute->newInstance();
+
+echo $instance->foo; // baz
+echo $instance->bar; // qux
+</code>
+
+For traditional Attribute usage this is perfectly sufficient. However, since this library is using the Attribute in a
+non-traditional sense we can't always rely on being able to execute this code. For example, if you write an ADR as an
+Attribute but then never annotate anything in your codebase with it. In this scenario your ADR would not be included.
+Not including an ADR because it hasn't been used in your codebase is considered a bug. To prevent this from happening
+we must be able to construct a Cspray\ArchitecturalDecision\ArchitecturalDecisionRecord instance without using the
+Reflection API.
+
+It is possible to resolve this problem by allowing a factory construct the ArchitecturalDecisionRecord instances, but
+with additional complexity and not solving either of the 2 primary problems with generic Attributes. Instead of doing
+that it is encouraged to always implement a custom Attribute per decision. If you have a compelling use case that can
+only be solved by having control of the Attribute instance is created please submit an Issue at
+https://github.com/cspray/architectural-decision.]]></contents>
     <codeAnnotations>
       <codeAnnotation>
         <class>Cspray\ArchitecturalDecision\ArchitecturalDecisionRecord</class>

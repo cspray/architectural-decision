@@ -3,9 +3,12 @@
 namespace Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords;
 
 use Attribute;
+use Cspray\ArchitecturalDecision\DecisionStatus;
 use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 
 /**
+ * # Explicit Architectural Decision Status
+ *
  * An explicit status should be provided for each ArchitecturalDecisionRecord instead of relying on an implicit status,
  * e.g. the presence of the ADR in your project's main branch.
  *
@@ -34,15 +37,11 @@ use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 #[Attribute(Attribute::TARGET_CLASS)]
 final class ExplicitArchitecturalDecisionStatus extends DocBlockArchitecturalDecision {
 
-    public function getTitle() : string {
-        return 'Explicit Architectural Decision Status';
-    }
-
     public function getDate() : string {
         return '2022-07-19';
     }
 
-    public function getStatus() : string {
-        return 'Accepted';
+    public function getStatus() : DecisionStatus {
+        return DecisionStatus::Accepted;
     }
 }

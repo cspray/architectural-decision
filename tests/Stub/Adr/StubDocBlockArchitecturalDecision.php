@@ -3,6 +3,7 @@
 namespace Cspray\ArchitecturalDecision\Stub\Adr;
 
 use Attribute;
+use Cspray\ArchitecturalDecision\DecisionStatus;
 use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 
 /**
@@ -14,15 +15,15 @@ use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 #[Attribute(Attribute::TARGET_ALL)]
 final class StubDocBlockArchitecturalDecision extends DocBlockArchitecturalDecision {
 
-    public function getTitle() : string {
-        return 'Stub Title';
+    public function getId() : string {
+        return 'stub-attr-id';
     }
 
     public function getDate() : string {
         return '2022-01-01';
     }
 
-    public function getStatus() : string {
-        return 'Accepted';
+    public function getStatus() : DecisionStatus {
+        return DecisionStatus::Accepted;
     }
 }

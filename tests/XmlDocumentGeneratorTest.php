@@ -10,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Cspray\ArchitecturalDecision\XmlDocumentGenerator
+ * @covers \Cspray\ArchitecturalDecision\ArchitecturalDecisionAttributeGatherer
+ * @covers \Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision
  */
 final class XmlDocumentGeneratorTest extends TestCase {
 
@@ -32,9 +34,7 @@ final class XmlDocumentGeneratorTest extends TestCase {
         $expected = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <architecturalDecisions xmlns="https://architectural-decision.cspray.io/schema/architectural-decision.xsd">
-  <architecturalDecision>
-    <attribute>Cspray\ArchitecturalDecision\Stub\Adr\StubDocBlockArchitecturalDecision</attribute>
-    <title>Stub Title</title>
+  <architecturalDecision id="stub-attr-id" attribute="Cspray\ArchitecturalDecision\Stub\Adr\StubDocBlockArchitecturalDecision">
     <date>2022-01-01</date>
     <status>Accepted</status>
     <contents><![CDATA[This is a DocBlock explaining an architectural decision.
@@ -94,9 +94,7 @@ XML;
         $expected = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <architecturalDecisions xmlns="https://architectural-decision.cspray.io/schema/architectural-decision.xsd">
-  <architecturalDecision>
-    <attribute>Cspray\ArchitecturalDecision\Stub\Adr\StubDocBlockArchitecturalDecision</attribute>
-    <title>Stub Title</title>
+  <architecturalDecision id="stub-attr-id" attribute="Cspray\ArchitecturalDecision\Stub\Adr\StubDocBlockArchitecturalDecision">
     <date>2022-01-01</date>
     <status>Accepted</status>
     <contents><![CDATA[This is a DocBlock explaining an architectural decision.

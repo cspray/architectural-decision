@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision
+ * @covers \Cspray\ArchitecturalDecision\Exception\MissingDocBlock
+ * @covers \Cspray\ArchitecturalDecision\Exception\Exception
  */
 final class DocBlockArchitecturalDecisionTest extends TestCase {
 
@@ -28,7 +30,7 @@ DOC;
     public function testGetTitleReturnsConstructorArgument() : void {
         $subject = new StubDocBlockArchitecturalDecision();
 
-        self::assertSame('Stub Title', $subject->getTitle());
+        self::assertSame('stub-attr-id', $subject->getId());
     }
 
     public function testGetContentsMissingDocBlockThrowsException() : void {

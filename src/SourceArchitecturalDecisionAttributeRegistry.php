@@ -16,7 +16,6 @@ use function Cspray\Typiphy\objectType;
 final class SourceArchitecturalDecisionAttributeRegistry implements ArchitecturalDecisionAttributeRegistry {
 
     private readonly Parser $parser;
-    private readonly NodeFinder $nodeFinder;
 
     /**
      * @param list<string> $searchDir
@@ -25,7 +24,6 @@ final class SourceArchitecturalDecisionAttributeRegistry implements Architectura
         private readonly array $searchDir
     ) {
         $this->parser = (new ParserFactory())->create(ParserFactory::ONLY_PHP7);
-        $this->nodeFinder = new NodeFinder();
     }
 
     public function getArchitecturalDecisionAttributes() : array {
@@ -60,9 +58,7 @@ final class SourceArchitecturalDecisionAttributeRegistry implements Architectura
         $nodeTraverser->addVisitor($gatherer);
 
         foreach ($this->searchDir as $searchDir) {
-            $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($searchDir)
-            );
+            $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($searchDir));
 
             /** @var SplFileInfo $file */
             foreach ($iterator as $file) {

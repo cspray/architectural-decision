@@ -52,27 +52,26 @@ final class XmlDocumentGenerator {
             /** @var ArchitecturalDecisionRecord $attribute */
             $attribute = $decisionAnnotation['attribute'];
 
-            $decisionNode = $decisionsNode->appendChild(
-                $dom->createElementNS(self::SCHEMA, 'architecturalDecision')
+            $decisionsNode->appendChild(
+                $decisionElement = $dom->createElementNS(self::SCHEMA, 'architecturalDecision')
             );
 
-            $decisionNode->appendChild(
-                $dom->createElementNS(self::SCHEMA, 'attribute', $attribute::class)
-            );
+            $decisionElement->setAttribute('id', $attribute->getId());
+            $decisionElement->setAttribute('attribute', $attribute::class);
 
-            $decisionNode->appendChild(
-                $dom->createElementNS(self::SCHEMA, 'title', $attribute->getTitle())
-            );
-
-            $decisionNode->appendChild(
+            $decisionElement->appendChild(
                 $dom->createElementNS(self::SCHEMA, 'date', $attribute->getDate())
             );
 
-            $decisionNode->appendChild(
-                $dom->createElementNS(self::SCHEMA, 'status', $attribute->getStatus())
+            $status = $attribute->getStatus();
+            if ($status instanceof DecisionStatus) {
+                $status = $status->value;
+            }
+            $decisionElement->appendChild(
+                $dom->createElementNS(self::SCHEMA, 'status', $status)
             );
 
-            $contentsNode = $decisionNode->appendChild(
+            $contentsNode = $decisionElement->appendChild(
                 $dom->createElementNS(self::SCHEMA, 'contents')
             );
 
@@ -82,7 +81,7 @@ final class XmlDocumentGenerator {
             );
 
             if (!empty($decisionAnnotation['targets'])) {
-                $codeAnnotationsNode = $decisionNode->appendChild(
+                $codeAnnotationsNode = $decisionElement->appendChild(
                     $dom->createElementNS(self::SCHEMA, 'codeAnnotations')
                 );
 

@@ -3,9 +3,12 @@
 namespace Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords;
 
 use Attribute;
+use Cspray\ArchitecturalDecision\DecisionStatus;
 use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 
 /**
+ * # Prefer Custom ArchitecturalDecisionRecord Over Generic
+ *
  * It is preferred to create a custom Attribute per decision over implementing a generic Attribute to handle many
  * decisions.
  *
@@ -32,27 +35,61 @@ use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
  * would lose the ability to infer this information as you're now much more dependent on the value of the Attribute
  * instead of the type to infer which decision it refers to.
  *
- * 3. Generic Attributes require more information to construct them correctly. This concern is meant to address a specific
- * technical limitation and/or requirement. We cannot rely strictly on an Attribute instance to know what ADR are available
- * and to generate information about them. For example, you introduce an ADR but do not add a corresponding Attribute
- * annotation anywhere. In this case there's no Attribute instance to gather but the decision should still be listed in
- * the generated XML document, simply with no <codeAnnotations></codeAnnotations> element present. This is a valid use
- * case and should be supported out-the-box. This limitation could be partly lifted from a technical level by introducing
- * a factory to create an ArchitecturalDecisionRecord instead of relying on a dependency-free constructor. However, with
- * the other limitations facing a generic Attribute approach I'd rather encourage following conventions.
+ * 3. This library cannot rely strictly on Reflection to retrieve an Attribute instance and must be able to construct
+ * an Attribute type without it being used in the codebase. To understand this restriction let's look at how you would
+ * typically get an instance of an Attribute that's been annotated on a class. Given the following code example:
+ *
+ * <code>
+ * #[Attribute]
+ * class SomeAttribute {
+ *
+ *      public function __construct(
+ *          public readonly string $foo,
+ *          public readonly string $bar
+ *      ) {}
+ *
+ * }
+ *
+ * #[SomeAttribute('baz', 'qux')]
+ * class SomeClass {
+ *
+ * }
+ * </code>
+ *
+ *
+ * To retrieve the instance of SomeAttribute that has 'baz' and 'qux' stored in the attribute's state we'd have to run
+ * code that resembles the following:
+ *
+ * <code>
+ * $reflection = new ReflectionClass(SomeClass::class);
+ * $reflectionAttribute = $reflection->getAttributes(SomeAttribute::class)[0];
+ * $instance = $reflectionAttribute->newInstance();
+ *
+ * echo $instance->foo; // baz
+ * echo $instance->bar; // qux
+ * </code>
+ *
+ * For traditional Attribute usage this is perfectly sufficient. However, since this library is using the Attribute in a
+ * non-traditional sense we can't always rely on being able to execute this code. For example, if you write an ADR as an
+ * Attribute but then never annotate anything in your codebase with it. In this scenario your ADR would not be included.
+ * Not including an ADR because it hasn't been used in your codebase is considered a bug. To prevent this from happening
+ * we must be able to construct a Cspray\ArchitecturalDecision\ArchitecturalDecisionRecord instance without using the
+ * Reflection API.
+ *
+ * It is possible to resolve this problem by allowing a factory construct the ArchitecturalDecisionRecord instances, but
+ * with additional complexity and not solving either of the 2 primary problems with generic Attributes. Instead of doing
+ * that it is encouraged to always implement a custom Attribute per decision. If you have a compelling use case that can
+ * only be solved by having control of the Attribute instance is created please submit an Issue at
+ * https://github.com/cspray/architectural-decision.
  */
 #[Attribute(Attribute::TARGET_CLASS)]
 final class PreferCustomArchitecturalDecisionOverGeneric extends DocBlockArchitecturalDecision {
-
-    public function getTitle() : string {
-        return 'Prefer Custom Attributes Over Generic';
-    }
 
     public function getDate() : string {
         return '2022-07-19';
     }
 
-    public function getStatus() : string {
-        return 'Accepted';
+    public function getStatus() : DecisionStatus {
+        return DecisionStatus::Accepted;
     }
 }

@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Cspray\ArchitecturalDecision\ArchitecturalDecisionAttributeGatherer
+ * @covers \Cspray\ArchitecturalDecision\Exception\AttributeNotArchitecturalDecisionRecord
+ * @covers \Cspray\ArchitecturalDecision\Exception\Exception
  */
 final class ArchitecturalDecisionAttributeGathererTest extends TestCase {
 

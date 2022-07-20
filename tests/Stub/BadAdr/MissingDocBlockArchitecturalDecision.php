@@ -8,7 +8,7 @@ use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 #[Attribute(Attribute::TARGET_ALL)]
 final class MissingDocBlockArchitecturalDecision extends DocBlockArchitecturalDecision {
 
-    public function getTitle() : string {
+    public function getId() : string {
         return 'Missing DocBlock';
     }
 

@@ -6,22 +6,33 @@ use Cspray\ArchitecturalDecision\Exception\MissingDocBlock;
 
 abstract class DocBlockArchitecturalDecision implements ArchitecturalDecisionRecord {
 
-    public function getContents() : string {
-        $reflection = new \ReflectionClass(static::class);
-        $content = $reflection->getDocComment();
+    private ?string $contents = null;
 
-        if (!$content) {
-            throw MissingDocBlock::fromClass($reflection->getName());
+    public function getId() : string {
+        $parts = explode('\\', static::class);
+        return array_pop($parts);
+    }
+
+    final public function getContents() : string {
+        if (!isset($this->contents)) {
+            $reflection = new \ReflectionClass(static::class);
+            $content = $reflection->getDocComment();
+
+            if (!$content) {
+                throw MissingDocBlock::fromClass($reflection->getName());
+            }
+
+            $parts = explode(PHP_EOL, $content);
+            array_shift($parts);
+            array_pop($parts);
+
+            foreach ($parts as $index => $part) {
+                $parts[$index] = ltrim($part, ' *');
+            }
+
+            $this->contents = implode(PHP_EOL, $parts);
         }
 
-        $parts = explode(PHP_EOL, $content);
-        array_shift($parts);
-        array_pop($parts);
-
-        foreach ($parts as $index => $part) {
-            $parts[$index] = ltrim($part, ' *');
-        }
-
-        return implode(PHP_EOL, $parts);
+        return $this->contents;
     }
 }
