@@ -6,6 +6,7 @@ use Cspray\ArchitecturalDecision\Stub\Adr\AnotherDocBlockArchitecturalDecision;
 use Cspray\ArchitecturalDecision\Stub\Adr\StubDocBlockArchitecturalDecision;
 use Cspray\ArchitecturalDecision\Stub\Adr\StubMetaDataArchitecturalDecision;
 use Cspray\ArchitecturalDecision\Stub\BadAdr\MissingDocBlockArchitecturalDecision;
+use Cspray\Typiphy\ObjectType;
 use PHPUnit\Framework\TestCase;
 use function Cspray\Typiphy\objectType;
 
@@ -20,11 +21,14 @@ final class SourceArchitecturalDecisionAttributeRegistryTest extends TestCase {
         $attributes = $subject->getArchitecturalDecisionAttributes();
 
         self::assertCount(4, $attributes);
+
+        usort($attributes, fn(ObjectType $a, ObjectType $b) => $a->getName() <=> $b->getName());
+
         self::assertSame([
-            objectType(MissingDocBlockArchitecturalDecision::class),
-            objectType(StubDocBlockArchitecturalDecision::class),
             objectType(AnotherDocBlockArchitecturalDecision::class),
+            objectType(StubDocBlockArchitecturalDecision::class),
             objectType(StubMetaDataArchitecturalDecision::class),
+            objectType(MissingDocBlockArchitecturalDecision::class),
         ], $attributes);
     }
 

@@ -28,7 +28,7 @@
         </exclude>
         <report>
             <text outputFile="php://stdout" showOnlySummary="true" />
-            <html outputDirectory="build" />
+            <!-- <html outputDirectory="build" /> -->
         </report>
     </coverage>
 </phpunit>
