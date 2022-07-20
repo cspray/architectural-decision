@@ -1,5 +1,7 @@
 # Architectural Decision
 
+[![Unit Tests & Static Analysis](https://github.com/cspray/architectural-decision/actions/workflows/testing.yml/badge.svg)](https://github.com/cspray/architectural-decision/actions/workflows/testing.yml)
+
 An [Architectural Decision](https://en.wikipedia.org/wiki/Architectural_decision) is a design decision that could potentially have a large impact on your codebase. Why those decisions were made, from a technical perspective and a business perspective, are important, so they should be documented properly. This library allows you to document Architectural Decision Records (ADR) as an Attribute within your codebase. Doing so provides some functionality that might be useful:
 
 - Architectural Decisions are close to your codebase. As in, the decision is right there in the repo, and you don't have to hunt through another system to find it.
