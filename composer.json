@@ -16,7 +16,7 @@
   "require": {
     "php": "^8.1",
     "ext-dom": "*",
-    "cspray/annotated-target": "^0.2"
+    "cspray/annotated-target": "^0.3"
   },
   "require-dev": {
     "cspray/phinal": "^1.0",
