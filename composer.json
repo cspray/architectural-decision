@@ -19,9 +19,9 @@
     "cspray/annotated-target": "^0.3"
   },
   "require-dev": {
-    "cspray/phinal": "^1.0",
+    "cspray/phinal": "^2.0",
     "mikey179/vfsstream": "^1.6",
-    "phpunit/phpunit": "^9.5",
-    "vimeo/psalm": "^4.24"
+    "phpunit/phpunit": "^10.1",
+    "vimeo/psalm": "^5.11"
   }
 }
