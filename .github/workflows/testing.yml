@@ -11,6 +11,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      XDEBUG_MODE=coverage
+
     steps:
       - uses: actions/checkout@v3
       - name: Composer
