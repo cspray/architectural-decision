@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      XDEBUG_MODE=coverage
+      XDEBUG_MODE: coverage
 
     steps:
       - uses: actions/checkout@v3
