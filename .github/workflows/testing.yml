@@ -11,11 +11,18 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      XDEBUG_MODE: coverage
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Composer
         uses: php-actions/composer@v6
       - name: Tests
-        uses: php-actions/phpunit@v2
+        uses: php-actions/phpunit@v3
+        with:
+          php_extensions: "xdebug"
+          coverage_html: "coverage/web"
+          coverage_text: true
       - name: Static Analysis
         run: "vendor/bin/psalm"
