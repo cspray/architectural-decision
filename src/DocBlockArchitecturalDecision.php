@@ -19,7 +19,7 @@ abstract class DocBlockArchitecturalDecision implements ArchitecturalDecisionRec
             $reflection = new \ReflectionClass(static::class);
             $content = $reflection->getDocComment();
 
-            if (!$content) {
+            if ($content === false) {
                 throw MissingDocBlock::fromClass($reflection->getName());
             }
 
