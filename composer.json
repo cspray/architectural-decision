@@ -22,6 +22,7 @@
     "cspray/phinal": "^2.0",
     "mikey179/vfsstream": "^1.6",
     "phpunit/phpunit": "^10.1",
+    "symfony/console": "^6.4",
     "vimeo/psalm": "^5.11"
   }
 }
