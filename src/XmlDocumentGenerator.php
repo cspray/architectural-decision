@@ -74,12 +74,11 @@ final class XmlDocumentGenerator {
                 $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'contents')
             );
 
-            assert(!is_null($contentsNode->ownerDocument));
             $contentsNode->appendChild(
                 $contentsNode->ownerDocument->createCDATASection($attribute->getContents())
             );
 
-            if (!empty($decisionAnnotation['targets'])) {
+            if ($decisionAnnotation['targets'] !== []) {
                 $codeAnnotationsNode = $decisionElement->appendChild(
                     $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'codeAnnotations')
                 );

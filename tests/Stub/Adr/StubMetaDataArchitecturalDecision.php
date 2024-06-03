@@ -22,7 +22,6 @@ final class StubMetaDataArchitecturalDecision extends DocBlockArchitecturalDecis
 
     public function setMetaData(DOMElement $meta) : void {
         $dom = $meta->ownerDocument;
-        assert(isset($dom));
 
         $foo = $meta->appendChild(
             $dom->createElement('foo')

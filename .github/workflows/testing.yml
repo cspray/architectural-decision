@@ -15,14 +15,19 @@ jobs:
       XDEBUG_MODE: coverage
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Composer
-        uses: php-actions/composer@v6
-      - name: Tests
-        uses: php-actions/phpunit@v3
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          php_extensions: "xdebug"
-          coverage_html: "coverage/web"
-          coverage_text: true
-      - name: Static Analysis
-        run: "vendor/bin/psalm"
+          php-version: 8.1
+          tools: composer:2
+      - name: Setup problem matchers for PHP
+        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+      - name: Composer Install
+        run: composer install
+      - name: PHPUnit
+        run: ./vendor/bin/phpunit
+      - name: Psalm
+        run: ./vendor/bin/psalm
