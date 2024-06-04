@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fbd334d53299f2eecd51e604a37d4f83",
+    "content-hash": "d637eae0f89b46c8697443fc90baba75",
     "packages": [
         {
             "name": "cspray/annotated-target",

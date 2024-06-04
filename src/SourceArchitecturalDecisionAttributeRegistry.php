@@ -23,7 +23,7 @@ final class SourceArchitecturalDecisionAttributeRegistry implements Architectura
     public function __construct(
         private readonly array $searchDir
     ) {
-        $this->parser = (new ParserFactory())->create(ParserFactory::ONLY_PHP7);
+        $this->parser = (new ParserFactory())->createForNewestSupportedVersion();
     }
 
     public function getArchitecturalDecisionAttributes() : array {
