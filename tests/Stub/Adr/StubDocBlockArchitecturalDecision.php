@@ -15,15 +15,15 @@ use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 #[Attribute(Attribute::TARGET_ALL)]
 final class StubDocBlockArchitecturalDecision extends DocBlockArchitecturalDecision {
 
-    public function getId() : string {
+    public function id() : string {
         return 'stub-attr-id';
     }
 
-    public function getDate() : string {
-        return '2022-01-01';
+    public function date() : \DateTimeImmutable {
+        return new \DateTimeImmutable('2022-01-01', new \DateTimeZone('America/New_York'));
     }
 
-    public function getStatus() : DecisionStatus {
+    public function status() : DecisionStatus {
         return DecisionStatus::Accepted;
     }
 }

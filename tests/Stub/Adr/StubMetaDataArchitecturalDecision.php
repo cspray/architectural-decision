@@ -4,6 +4,7 @@ namespace Cspray\ArchitecturalDecision\Stub\Adr;
 
 use Cspray\ArchitecturalDecision\DecisionStatus;
 use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
+use DateTimeImmutable;
 use DOMElement;
 
 /**
@@ -12,15 +13,15 @@ use DOMElement;
 #[\Attribute(\Attribute::TARGET_CLASS)]
 final class StubMetaDataArchitecturalDecision extends DocBlockArchitecturalDecision {
 
-    public function getDate() : string {
-        return '2022-07-20';
+    public function date() : DateTimeImmutable {
+        return new DateTimeImmutable('2022-07-20', new \DateTimeZone('America/New_York'));
     }
 
-    public function getStatus() : string|DecisionStatus {
+    public function status() : string|DecisionStatus {
         return DecisionStatus::Draft;
     }
 
-    public function setMetaData(DOMElement $meta) : void {
+    public function addMetaData(DOMElement $meta) : void {
         $dom = $meta->ownerDocument;
 
         $foo = $meta->appendChild(

@@ -18,7 +18,7 @@ final class SourceArchitecturalDecisionAttributeRegistryTest extends TestCase {
     public function testSourceDirectoryContainsAttributes() : void {
         $subject = new SourceArchitecturalDecisionAttributeRegistry([__DIR__]);
 
-        $attributes = $subject->getArchitecturalDecisionAttributes();
+        $attributes = $subject->architecturalDecisionAttributes();
 
         self::assertCount(4, $attributes);
 

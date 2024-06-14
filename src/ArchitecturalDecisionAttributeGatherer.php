@@ -21,7 +21,7 @@ final class ArchitecturalDecisionAttributeGatherer {
     /**
      * @return list<ObjectType>
      */
-    public function getRegisteredAttributes() : array {
+    public function registeredAttributes() : array {
         return $this->attributeTypes;
     }
 

@@ -25,7 +25,7 @@ final class XmlDocumentGenerator {
         /** @var array<class-string, array{attribute: ArchitecturalDecisionRecord, targets: list<AnnotatedTarget>}> $decisionAnnotations */
         $decisionAnnotations = [];
 
-        foreach ($this->gatherer->getRegisteredAttributes() as $attributeType) {
+        foreach ($this->gatherer->registeredAttributes() as $attributeType) {
             /** @psalm-var class-string $type */
             $type = $attributeType->getName();
             $decisionAnnotations[$type] = [
@@ -55,14 +55,14 @@ final class XmlDocumentGenerator {
                 $decisionElement = $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'architecturalDecision')
             );
 
-            $decisionElement->setAttribute('id', $attribute->getId());
+            $decisionElement->setAttribute('id', $attribute->id());
             $decisionElement->setAttribute('attribute', $attribute::class);
 
             $decisionElement->appendChild(
-                $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'date', $attribute->getDate())
+                $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'date', $attribute->date()->format('Y-m-d'))
             );
 
-            $status = $attribute->getStatus();
+            $status = $attribute->status();
             if ($status instanceof DecisionStatus) {
                 $status = $status->value;
             }
@@ -75,7 +75,7 @@ final class XmlDocumentGenerator {
             );
 
             $contentsNode->appendChild(
-                $contentsNode->ownerDocument->createCDATASection($attribute->getContents())
+                $contentsNode->ownerDocument->createCDATASection($attribute->contents())
             );
 
             if ($decisionAnnotation['targets'] !== []) {
@@ -158,7 +158,7 @@ final class XmlDocumentGenerator {
                 $meta = $dom->createElementNS(ArchitecturalDecisionRecord::SCHEMA, 'meta')
             );
 
-            $attribute->setMetaData($meta);
+            $attribute->addMetaData($meta);
         }
 
         $dom->schemaValidate(dirname(__DIR__) . '/architectural-decision.xsd');

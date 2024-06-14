@@ -3,7 +3,6 @@
 
 use Cspray\AnnotatedTarget\PhpParserAnnotatedTargetParser;
 use Cspray\ArchitecturalDecision\ArchitecturalDecisionAttributeGatherer;
-use Cspray\ArchitecturalDecision\Initializer;
 use Cspray\ArchitecturalDecision\SourceArchitecturalDecisionAttributeRegistry;
 use Cspray\ArchitecturalDecision\XmlDocumentGenerator;
 
@@ -35,25 +34,13 @@ foreach (new RecursiveIteratorIterator(new RecursiveArrayIterator($composerDirs)
     $paths[] = $rootDir . '/' . $composerDir;
 }
 
-$initializers = $composer['extra']['$architecturalDecision']['initializers'] ?? [];
+$additionalScanPaths = $composer['extra']['$architecturalDecision']['additionalScanPaths'] ?? [];
 
-foreach ($initializers as $initializerClass) {
-    $initializerClass = (string) $initializerClass;
-    if (!class_exists($initializerClass)) {
-        echo 'Your configured initializer ' . $initializerClass . ' is not an autoloadable class.';
-        exit(255);
-    }
-
-    if (!is_subclass_of($initializerClass, Initializer::class)) {
-        echo 'Your configured initializer ' . $initializerClass . ' MUST extend ' . Initializer::class;
-        exit(255);
-    }
-
-    $initializer = new $initializerClass();
-    $paths = [...$paths, ...$initializer->getAdditionalScanPaths()];
+foreach ($additionalScanPaths as $additionalScanPath) {
+    $paths[] = $rootDir . '/' . $additionalScanPath;
 }
 
-$attributes = (new SourceArchitecturalDecisionAttributeRegistry($paths))->getArchitecturalDecisionAttributes();
+$attributes = (new SourceArchitecturalDecisionAttributeRegistry($paths))->architecturalDecisionAttributes();
 if (count($attributes) === 0) {
     echo 'You must implement an ArchitecturalDecisionRecord in your codebase before running this command!';
     exit(255);

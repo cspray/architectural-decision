@@ -4,6 +4,7 @@ namespace Cspray\ArchitecturalDecision\Stub\Adr;
 
 use Attribute;
 use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
+use DateTimeImmutable;
 
 /**
  * Another doc block.
@@ -11,15 +12,15 @@ use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 #[Attribute(Attribute::TARGET_ALL)]
 final class AnotherDocBlockArchitecturalDecision extends DocBlockArchitecturalDecision {
 
-    public function getId() : string {
+    public function id() : string {
         return 'Another DocBlock';
     }
 
-    public function getDate() : string {
-        return '1984-01-01';
+    public function date() : DateTimeImmutable {
+        return new DateTimeImmutable('1984-01-01', new \DateTimeZone('America/New_York'));
     }
 
-    public function getStatus() : string {
+    public function status() : string {
         return 'Draft';
     }
 }

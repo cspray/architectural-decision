@@ -9,12 +9,12 @@ abstract class DocBlockArchitecturalDecision implements ArchitecturalDecisionRec
 
     private ?string $contents = null;
 
-    public function getId() : string {
+    public function id() : string {
         $parts = explode('\\', static::class);
         return array_pop($parts);
     }
 
-    final public function getContents() : string {
+    final public function contents() : string {
         if (!isset($this->contents)) {
             $reflection = new \ReflectionClass(static::class);
             $content = $reflection->getDocComment();
@@ -37,7 +37,7 @@ abstract class DocBlockArchitecturalDecision implements ArchitecturalDecisionRec
         return $this->contents;
     }
 
-    public function setMetaData(DOMElement $meta) : void {
+    public function addMetaData(DOMElement $meta) : void {
         // noop, override to set your custom meta data
     }
 }

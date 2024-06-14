@@ -26,7 +26,7 @@ final class SourceArchitecturalDecisionAttributeRegistry implements Architectura
         $this->parser = (new ParserFactory())->createForNewestSupportedVersion();
     }
 
-    public function getArchitecturalDecisionAttributes() : array {
+    public function architecturalDecisionAttributes() : array {
         $gatherer = new class extends NodeVisitorAbstract {
 
             /**

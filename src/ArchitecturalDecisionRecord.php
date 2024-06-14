@@ -5,6 +5,7 @@ namespace Cspray\ArchitecturalDecision;
 use Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\ExplicitArchitecturalDecisionStatus;
 use Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\PreferCustomArchitecturalDecisionOverGeneric;
 use Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords\UsingAttributesForArchitecturalDecisions;
+use DateTimeImmutable;
 use DOMElement;
 
 #[ExplicitArchitecturalDecisionStatus]
@@ -14,14 +15,14 @@ interface ArchitecturalDecisionRecord {
 
     const SCHEMA = 'https://architectural-decision.cspray.io/schema/architectural-decision.xsd';
 
-    public function getId() : string;
+    public function id() : string;
 
-    public function getDate() : string;
+    public function date() : DateTimeImmutable;
 
-    public function getStatus() : string|DecisionStatus;
+    public function status() : string|DecisionStatus;
 
-    public function getContents() : string;
+    public function contents() : string;
 
-    public function setMetaData(DOMElement $meta) : void;
+    public function addMetaData(DOMElement $meta) : void;
 
 }
