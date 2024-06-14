@@ -24,13 +24,13 @@ This is the content that should be returned from DocBlockArchitecturalDecision::
 displayed in the CLI tool explaining the reason for the Architectural Decision.
 DOC;
 
-        self::assertSame($expected, $subject->getContents());
+        self::assertSame($expected, $subject->contents());
     }
 
     public function testGetTitleReturnsConstructorArgument() : void {
         $subject = new StubDocBlockArchitecturalDecision();
 
-        self::assertSame('stub-attr-id', $subject->getId());
+        self::assertSame('stub-attr-id', $subject->id());
     }
 
     public function testGetContentsMissingDocBlockThrowsException() : void {
@@ -39,7 +39,7 @@ DOC;
         self::expectException(MissingDocBlock::class);
         self::expectExceptionMessage('Expected to find a DocBlock associated with ' . MissingDocBlockArchitecturalDecision::class);
 
-        $subject->getContents();
+        $subject->contents();
     }
 
 }

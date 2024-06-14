@@ -1,3 +1,4 @@
 .phpunit.cache
 .phpunit.result.cache
+architectural-decisions.xml.bak
 vendor/

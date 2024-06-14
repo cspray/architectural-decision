@@ -9,6 +9,6 @@ interface ArchitecturalDecisionAttributeRegistry {
     /**
      * @return list<ObjectType>
      */
-    public function getArchitecturalDecisionAttributes() : array;
+    public function architecturalDecisionAttributes() : array;
 
 }

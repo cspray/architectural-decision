@@ -39,6 +39,7 @@ namespace Acme\ArchitecturalDecisions;
 use Cspray\ArchitecturalDecision\DecisionStatus;
 use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 use Attribute;
+use DateTimeImmutable;
 
 /**
  * Explain the decision and its potential business impact. 
@@ -46,11 +47,11 @@ use Attribute;
 #[Attribute]
 final class MyFirstDecision extends DocBlockArchitecturalDecision {
     
-    public function getDate() : string {
-        return '2022-07-19';
+    public function date() : DateTimeImmutable {
+        return new DateTimeImmutable('2022-07-19');
     }
     
-    public function getStatus() : string|DecisionStatus {
+    public function status() : string|DecisionStatus {
         return DecisionStatus::Draft;
     }
 
@@ -67,7 +68,7 @@ If successful a file named `architectural-decisions.xml` will be generated and s
 
 ### Setting Custom Meta Data
 
-There might be additional information you'd like to include with an ArchitecturalDecisionRecord that doesn't fit into the contents of the decision. Perhaps it is additional data that can be used with static analysis. Perhaps you like to include information about who authored the decision or some other meta-data. You can implement the `ArchitecturalDecisionRecord::setMetaData(DOMElement $meta)` method to add whatever data you'd like to the generated XML document. Please review the [DOMDocument]() documentation for how to appropriately add elements and attribute to the `<meta>` element.
+There might be additional information you'd like to include with an ArchitecturalDecisionRecord that doesn't fit into the contents of the decision. Perhaps it is additional data that can be used with static analysis. Perhaps you like to include information about who authored the decision or some other meta-data. You can implement the `ArchitecturalDecisionRecord::setMetaData(DOMElement $meta)` method to add whatever data you'd like to the generated XML document. Please review the [DOMDocument](https://www.php.net/domdocument) documentation for how to appropriately add elements and attribute to the `<meta>` element.
 
 ## Example XML Document
 
