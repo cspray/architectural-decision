@@ -2,9 +2,9 @@ name: 'Unit Tests & Static Analysis'
 
 on:
   push:
-    branches: [ main ]
+    branches: [ release-1.x, release-2.x ]
   pull_request:
-    branches: [ main ]
+    branches: [ release-1.x, release-2.x ]
 
 jobs:
   continuous-integration:
