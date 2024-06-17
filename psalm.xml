@@ -13,7 +13,6 @@
     <directory name="tests"/>
     <ignoreFiles>
       <directory name="vendor"/>
-      <directory name="tests/Fixture" />
     </ignoreFiles>
   </projectFiles>
 
