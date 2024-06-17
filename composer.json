@@ -2,7 +2,6 @@
   "name": "cspray/architectural-decision",
   "description": "A library to keep track of architectural decisions with PHP annotations.",
   "license": ["MIT"],
-  "bin": ["bin/architectural-decisions"],
   "autoload": {
     "psr-4": {
       "Cspray\\ArchitecturalDecision\\": "src"
@@ -14,18 +13,11 @@
     }
   },
   "require": {
-    "php": "^8.1",
-    "ext-dom": "*",
-    "cspray/annotated-target": "^1.1",
-    "nikic/php-parser": "^4.18 || ^5.0"
+    "php": "^8.1"
   },
   "require-dev": {
     "cspray/phinal": "^2.0",
-    "mikey179/vfsstream": "^1.6",
     "phpunit/phpunit": "^10.1",
-    "symfony/console": "^6.4",
-    "symfony/filesystem": "^6.4",
-    "symfony/string": "^6.4",
     "vimeo/psalm": "^5.11"
   }
 }
