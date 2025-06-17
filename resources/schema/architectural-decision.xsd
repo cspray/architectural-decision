@@ -9,11 +9,6 @@
     targetNamespace="https://architectural-decision.cspray.io/schema/architectural-decision.xsd">
 
   <xs:element name="architecturalDecisions" type="architecturalDecisionsType">
-    <xs:annotation>
-      <xs:documentation>
-
-      </xs:documentation>
-    </xs:annotation>
   </xs:element>
 
   <xs:complexType name="architecturalDecisionsType">
@@ -24,6 +19,7 @@
 
   <xs:complexType name="architecturalDecisionType">
     <xs:all>
+      <xs:element name="authors" type="authorsType" minOccurs="1" maxOccurs="1" />
       <xs:element name="date" type="xs:date" minOccurs="1" maxOccurs="1" />
       <xs:element name="status" type="xs:token" minOccurs="1" maxOccurs="1" />
       <xs:element name="contents" type="xs:string" minOccurs="1" maxOccurs="1" />
@@ -32,6 +28,12 @@
     </xs:all>
     <xs:attribute name="id" type="xs:ID" use="required" />
     <xs:attribute name="attribute" type="xs:token" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="authorsType">
+    <xs:sequence minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="author" type="xs:string" />
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="codeAnnotationsType">

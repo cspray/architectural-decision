@@ -3,6 +3,7 @@
 namespace Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords;
 
 use Attribute;
+use Cspray\ArchitecturalDecision\DecisionAuthor;
 use Cspray\ArchitecturalDecision\DecisionStatus;
 use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 use DateTimeImmutable;
@@ -39,11 +40,12 @@ use DateTimeZone;
 #[Attribute(Attribute::TARGET_CLASS)]
 final class ExplicitArchitecturalDecisionStatus extends DocBlockArchitecturalDecision {
 
-    public function date() : DateTimeImmutable {
-        return new DateTimeImmutable('2022-07-19', new DateTimeZone('America/New_York'));
+    public function __construct() {
+        parent::__construct(
+            new DateTimeImmutable('2022-07-19', new DateTimeZone('America/New_York')),
+            DecisionStatus::accepted(),
+            [DecisionAuthor::fromName('Charles Sprayberry')]
+        );
     }
 
-    public function status() : DecisionStatus {
-        return DecisionStatus::Accepted;
-    }
 }
