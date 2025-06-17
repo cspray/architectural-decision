@@ -23,7 +23,7 @@ The first thing to do is implement an Architectural Decision Record! This is han
 
 namespace Acme\ArchitecturalDecisions;
 
-use Cspray\ArchitecturalDecision\SupportedDecisionStatus;
+use Cspray\ArchitecturalDecision\DecisionAuthor;use Cspray\ArchitecturalDecision\DecisionMetaData;use Cspray\ArchitecturalDecision\DecisionStatus;use Cspray\ArchitecturalDecision\SupportedDecisionStatus;
 use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 use Attribute;
 use DateTimeImmutable;
@@ -33,13 +33,16 @@ use DateTimeImmutable;
  */
 #[Attribute]
 final class MyFirstDecision extends DocBlockArchitecturalDecision {
-    
-    public function date() : DateTimeImmutable {
-        return new DateTimeImmutable('2022-07-19');
-    }
-    
-    public function status() : string|SupportedDecisionStatus {
-        return SupportedDecisionStatus::Draft;
+
+    public function __construct() {
+        parent::__construct(
+            date: new DateTimeImmutable('2022-07-19'),
+            status: DecisionStatus::draft(),
+            authors: [DecisionAuthor::fromName('cspray')],
+            metaData: [
+                DecisionMetaData::keyValue('since', 'v1.3')
+            ]
+        );
     }
 
 }
