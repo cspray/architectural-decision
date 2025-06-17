@@ -3,8 +3,11 @@
 namespace Cspray\ArchitecturalDecision\Stub\Adr;
 
 use Attribute;
+use Cspray\ArchitecturalDecision\DecisionAuthor;
 use Cspray\ArchitecturalDecision\DecisionStatus;
+use Cspray\ArchitecturalDecision\SupportedDecisionStatus;
 use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
+use DateTimeImmutable;
 
 /**
  * This is a DocBlock explaining an architectural decision.
@@ -15,15 +18,12 @@ use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
 #[Attribute(Attribute::TARGET_ALL)]
 final class StubDocBlockArchitecturalDecision extends DocBlockArchitecturalDecision {
 
-    public function id() : string {
-        return 'stub-attr-id';
+    public function __construct() {
+        parent::__construct(
+            new \DateTimeImmutable('2022-01-01', new \DateTimeZone('America/New_York')),
+            DecisionStatus::accepted(),
+            [DecisionAuthor::fromName('Charles Sprayberry')]
+        );
     }
 
-    public function date() : \DateTimeImmutable {
-        return new \DateTimeImmutable('2022-01-01', new \DateTimeZone('America/New_York'));
-    }
-
-    public function status() : DecisionStatus {
-        return DecisionStatus::Accepted;
-    }
 }

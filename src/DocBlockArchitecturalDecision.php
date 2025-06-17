@@ -2,42 +2,58 @@
 
 namespace Cspray\ArchitecturalDecision;
 
-use Cspray\ArchitecturalDecision\Exception\MissingDocBlock;
-use DOMElement;
+use DateTimeImmutable;
+use Override;
 
 abstract class DocBlockArchitecturalDecision implements ArchitecturalDecisionRecord {
 
-    private ?string $contents = null;
+    private readonly DecisionId $id;
+    private readonly DecisionContents $contents;
 
-    public function id() : string {
-        $parts = explode('\\', static::class);
-        return array_pop($parts);
+    /**
+     * @param non-empty-list<DecisionAuthor> $authors
+     * @param list<DecisionMetaData> $metaData
+     */
+    protected function __construct(
+        private readonly DateTimeImmutable $date,
+        private readonly DecisionStatus $status,
+        private readonly array $authors,
+        private readonly array $metaData = [],
+    ) {
+        $this->id = DecisionId::fromUniqueString(static::class);
+        $this->contents = DecisionContents::fromClassLevelDocBlock(static::class);
     }
 
-    final public function contents() : string {
-        if (!isset($this->contents)) {
-            $reflection = new \ReflectionClass(static::class);
-            $content = $reflection->getDocComment();
+    #[Override]
+    final public function id() : DecisionId {
+        return $this->id;
+    }
 
-            if ($content === false) {
-                throw MissingDocBlock::fromClass($reflection->getName());
-            }
+    #[Override]
+    final public function date() : DateTimeImmutable {
+        return $this->date;
+    }
 
-            $parts = explode(PHP_EOL, $content);
-            array_shift($parts);
-            array_pop($parts);
+    #[Override]
+    final public function authors() : array {
+        return $this->authors;
+    }
 
-            foreach ($parts as $index => $part) {
-                $parts[$index] = ltrim($part, ' *');
-            }
+    #[Override]
+    final public function status() : DecisionStatus {
+        return $this->status;
+    }
 
-            $this->contents = implode(PHP_EOL, $parts);
-        }
-
+    #[Override]
+    final public function contents() : DecisionContents {
         return $this->contents;
     }
 
-    public function addMetaData(DOMElement $meta) : void {
-        // noop, override to set your custom meta data
+    #[Override]
+    /**
+     * @return list<DecisionMetaData>
+     */
+    final public function metaData() : array {
+        return $this->metaData;
     }
 }
