@@ -26,8 +26,8 @@ jobs:
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
       - name: Composer Install
-        run: composer install
+        run: composer install && cd ./tools/psalm && composer install
       - name: PHPUnit
         run: ./vendor/bin/phpunit
       - name: Psalm
-        run: ./vendor/bin/psalm
+        run: ./tools/psalm/vendor/bin/psalm

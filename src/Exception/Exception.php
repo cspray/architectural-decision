@@ -7,7 +7,7 @@ use Throwable;
 
 abstract class Exception extends PhpException {
 
-    final protected function __construct(
+    protected function __construct(
         string $message,
         int $code = 0,
         Throwable $previous = null

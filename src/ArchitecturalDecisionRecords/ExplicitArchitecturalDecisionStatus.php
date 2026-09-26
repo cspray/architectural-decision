@@ -5,7 +5,7 @@ namespace Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords;
 use Attribute;
 use Cspray\ArchitecturalDecision\DecisionAuthor;
 use Cspray\ArchitecturalDecision\DecisionStatus;
-use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
+use Cspray\ArchitecturalDecision\DocBlock\DocBlockArchitecturalDecision;
 use DateTimeImmutable;
 use DateTimeZone;
 
@@ -36,16 +36,10 @@ use DateTimeZone;
  * Requiring an explicit status enables both workflows; having an implicit status is still supported by providing your
  * own implementation logic and explicit statuses are also supported. Only having an implicit status would not allow
  * for both workflows.
+ *
+ * @date 2022-07-19
+ * @status Accepted
+ * @author Charles Sprayberry
  */
 #[Attribute(Attribute::TARGET_CLASS)]
-final class ExplicitArchitecturalDecisionStatus extends DocBlockArchitecturalDecision {
-
-    public function __construct() {
-        parent::__construct(
-            new DateTimeImmutable('2022-07-19', new DateTimeZone('America/New_York')),
-            DecisionStatus::accepted(),
-            [DecisionAuthor::fromName('Charles Sprayberry')]
-        );
-    }
-
-}
+final class ExplicitArchitecturalDecisionStatus extends DocBlockArchitecturalDecision {}

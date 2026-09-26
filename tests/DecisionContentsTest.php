@@ -3,18 +3,27 @@
 namespace Cspray\ArchitecturalDecision;
 
 use Cspray\ArchitecturalDecision\DataProvider\GenericStringProvider;
+use Cspray\ArchitecturalDecision\DocBlock\ClassDocBlock;
+use Cspray\ArchitecturalDecision\DocBlock\Tags;
 use Cspray\ArchitecturalDecision\Exception\EmptyDecisionContents;
 use Cspray\ArchitecturalDecision\Exception\InvalidDocBlockArchitecturalDecision;
 use Cspray\ArchitecturalDecision\Stub\Adr\StubDocBlockArchitecturalDecision;
 use Cspray\ArchitecturalDecision\Stub\BadAdr\MissingDocBlockArchitecturalDecision;
+use Cspray\AssertThrows\ThrowableAssertTestCaseMethods;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 #[CoversClass(DecisionContents::class)]
 #[CoversClass(EmptyDecisionContents::class)]
 #[CoversClass(InvalidDocBlockArchitecturalDecision::class)]
+#[UsesClass(ClassDocBlock::class)]
+#[UsesClass(Tags::class)]
 final class DecisionContentsTest extends TestCase {
+
+    use ThrowableAssertTestCaseMethods;
 
     #[DataProviderExternal(GenericStringProvider::class, 'emptyStringProvider')]
     public function testEmptyContentsThrowsException(string $contents) : void {
@@ -30,24 +39,16 @@ final class DecisionContentsTest extends TestCase {
         self::assertSame('the contents of the decision', $subject->value);
     }
 
-    public function testDocBlockDecisionIsNotClassThrowsException() : void {
-        $this->expectException(InvalidDocBlockArchitecturalDecision::class);
-        $this->expectExceptionMessage(
-            'Architectural Decision Records derived from a doc block MUST come from a loadable class, but '
-            . '"not a class" is not a class'
-        );
-
-        DecisionContents::fromClassLevelDocBlock('not a class');
-    }
-
     public function testDocBlockDecisionIsNotArchitecturalDecisionRecordThrowsException() : void {
-        $this->expectException(InvalidDocBlockArchitecturalDecision::class);
-        $this->expectExceptionMessage(
+        $throwable = self::assertThrowsExceptionTypeWithMessage(
+            static fn() => DecisionContents::fromClassLevelDocBlock(
+                ClassDocBlock::fromReflection(new ReflectionClass(self::class))
+            ),
+            InvalidDocBlockArchitecturalDecision::class,
             'Architectural Decision Records derived from a doc block MUST implement '
-            . ArchitecturalDecisionRecord::class . ', but ' . self::class . ' does not'
+            . ArchitecturalDecisionRecord::class . ', but ' . self::class . ' does not',
         );
-
-        DecisionContents::fromClassLevelDocBlock(self::class);
+        self::assertSame([], $throwable->validationFailures);
     }
 
     public function testDocBlockDecisionDoesNotHaveDocBlockThrowsException() : void {
@@ -57,11 +58,19 @@ final class DecisionContentsTest extends TestCase {
             . MissingDocBlockArchitecturalDecision::class . ' does not'
         );
 
-        DecisionContents::fromClassLevelDocBlock(MissingDocBlockArchitecturalDecision::class);
+        DecisionContents::fromClassLevelDocBlock(
+            ClassDocBlock::fromReflection(
+                new ReflectionClass(MissingDocBlockArchitecturalDecision::class)
+            ),
+        );
     }
 
     public function testDocBlockPresentHasCorrectContents() : void {
-        $contents = DecisionContents::fromClassLevelDocBlock(StubDocBlockArchitecturalDecision::class);
+        $contents = DecisionContents::fromClassLevelDocBlock(
+            ClassDocBlock::fromReflection(
+                new ReflectionClass(StubDocBlockArchitecturalDecision::class),
+            ),
+        );
 
         $expected = <<<TEXT
         This is a DocBlock explaining an architectural decision.

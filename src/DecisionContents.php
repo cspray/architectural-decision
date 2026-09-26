@@ -2,6 +2,7 @@
 
 namespace Cspray\ArchitecturalDecision;
 
+use Cspray\ArchitecturalDecision\DocBlock\ClassDocBlock;
 use Cspray\ArchitecturalDecision\Exception\EmptyDecisionContents;
 use Cspray\ArchitecturalDecision\Exception\InvalidDocBlockArchitecturalDecision;
 
@@ -27,33 +28,16 @@ final readonly class DecisionContents {
      * @throws EmptyDecisionContents
      * @throws InvalidDocBlockArchitecturalDecision
      */
-    public static function fromClassLevelDocBlock(string $fqcn) : self {
-        if (!class_exists($fqcn)) {
-            throw InvalidDocBlockArchitecturalDecision::fromDocBlockAdrNotClass($fqcn);
+    public static function fromClassLevelDocBlock(ClassDocBlock $docBlock) : self {
+        if (!is_a($docBlock->class, ArchitecturalDecisionRecord::class, true)) {
+            throw InvalidDocBlockArchitecturalDecision::fromDocBlockClassNotArchitecturalDecisionRecord($docBlock->class);
         }
 
-        if (!is_a($fqcn, ArchitecturalDecisionRecord::class, true)) {
-            throw InvalidDocBlockArchitecturalDecision::fromDocBlockClassNotArchitecturalDecisionRecord($fqcn);
+        if ($docBlock->contents === null) {
+            throw InvalidDocBlockArchitecturalDecision::fromArchitecturalDecisionRecordHasNoDocBlock($docBlock->class);
         }
 
-        $reflection = new \ReflectionClass($fqcn);
-        $docBlock = $reflection->getDocComment();
-
-        if ($docBlock === false) {
-            throw InvalidDocBlockArchitecturalDecision::fromArchitecturalDecisionRecordHasNoDocBlock($fqcn);
-        }
-
-        $parts = explode(PHP_EOL, $docBlock);
-        array_shift($parts);
-        array_pop($parts);
-
-        foreach ($parts as $index => $part) {
-            $parts[$index] = ltrim($part, ' *');
-        }
-
-        $contents = implode(PHP_EOL, $parts);
-
-        return self::fromString($contents);
+        return self::fromString($docBlock->contents);
     }
 
 }
