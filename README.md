@@ -23,29 +23,16 @@ The first thing to do is implement an Architectural Decision Record! This is han
 
 namespace Acme\ArchitecturalDecisions;
 
-use Cspray\ArchitecturalDecision\DecisionAuthor;use Cspray\ArchitecturalDecision\DecisionMetaData;use Cspray\ArchitecturalDecision\DecisionStatus;use Cspray\ArchitecturalDecision\SupportedDecisionStatus;
-use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
-use Attribute;
-use DateTimeImmutable;
-
 /**
  * Explain the decision and its potential business impact. 
+ * 
+ * @date 2022-07-19
+ * @status Draft
+ * @author cspray
+ * @since v1.3
  */
-#[Attribute]
-final class MyFirstDecision extends DocBlockArchitecturalDecision {
-
-    public function __construct() {
-        parent::__construct(
-            date: new DateTimeImmutable('2022-07-19'),
-            status: DecisionStatus::draft(),
-            authors: [DecisionAuthor::fromName('cspray')],
-            metaData: [
-                DecisionMetaData::keyValue('since', 'v1.3')
-            ]
-        );
-    }
-
-}
+#[Attribute(Attribute::TARGET_ALL)]
+final class MyFirstDecision extends DocBlockArchitecturalDecision {}
 ```
 
 Optionally, you can also annotate appropriate places in your codebase where it might make sense to do so.

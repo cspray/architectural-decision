@@ -6,29 +6,18 @@ final readonly class DecisionMetaData {
 
     /**
      * @param non-empty-string $key
-     * @param non-empty-string|int|float|bool $value
-     * @param list<DecisionMetaDataProperty> $properties
+     * @param string|list<string> $value
      */
     private function __construct(
         public string $key,
-        public string|int|float|bool $value,
-        public array $properties
+        public string|array $value,
     ) {}
 
     /**
      * @param non-empty-string $key
-     * @param non-empty-string|int|float|bool $value
+     * @param string|list<string> $value
      */
-    public static function keyValue(string $key, string|int|float|bool $value) : self {
-        return new self($key, $value, []);
-    }
-
-    /**
-     * @param non-empty-string $key
-     * @param non-empty-string|int|float|bool $value
-     * @param non-empty-list<DecisionMetaDataProperty> $properties
-     */
-    public static function keyValueWithProperties(string $key, string|int|float|bool $value, array $properties) : self {
-        return new self($key, $value, $properties);
+    public static function keyValue(string $key, string|array $value) : self {
+        return new self($key, $value);
     }
 }

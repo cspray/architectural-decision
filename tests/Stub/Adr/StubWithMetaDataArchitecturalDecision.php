@@ -7,28 +7,18 @@ use Cspray\ArchitecturalDecision\DecisionAuthor;
 use Cspray\ArchitecturalDecision\DecisionMetaData;
 use Cspray\ArchitecturalDecision\DecisionMetaDataProperty;
 use Cspray\ArchitecturalDecision\DecisionStatus;
-use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
+use Cspray\ArchitecturalDecision\DocBlock\DocBlockArchitecturalDecision;
 use DateTimeImmutable;
 
 /**
  * Boilerplate markdown content.
+ *
+ * @date 2025-06-11
+ * @status Accepted
+ * @author Charles Sprayberry
+ * @foo bar
+ * @propOne one prop value
+ * @prop-two two prop value
  */
 #[Attribute(Attribute::TARGET_ALL)]
-final class StubWithMetaDataArchitecturalDecision extends DocBlockArchitecturalDecision {
-
-    public function __construct() {
-        parent::__construct(
-            new DateTimeImmutable('2025-06-11', new \DateTimeZone('America/New_York')),
-            DecisionStatus::accepted(),
-            [DecisionAuthor::fromName('Charles Sprayberry')],
-            [
-                DecisionMetaData::keyValue('foo', 'bar'),
-                DecisionMetaData::keyValueWithProperties('with-properties', 42, [
-                    DecisionMetaDataProperty::keyValue('prop-one', 'prop-one-value'),
-                    DecisionMetaDataProperty::keyValue('prop-two', 'prop-two-value'),
-                ]),
-            ]
-        );
-    }
-
-}
+final class StubWithMetaDataArchitecturalDecision extends DocBlockArchitecturalDecision {}

@@ -5,7 +5,7 @@ namespace Cspray\ArchitecturalDecision\ArchitecturalDecisionRecords;
 use Attribute;
 use Cspray\ArchitecturalDecision\DecisionAuthor;
 use Cspray\ArchitecturalDecision\DecisionStatus;
-use Cspray\ArchitecturalDecision\DocBlockArchitecturalDecision;
+use Cspray\ArchitecturalDecision\DocBlock\DocBlockArchitecturalDecision;
 use DateTimeImmutable;
 
 /**
@@ -83,16 +83,10 @@ use DateTimeImmutable;
  * that it is encouraged to always implement a custom Attribute per decision. If you have a compelling use case that can
  * only be solved by having control of the Attribute instance is created please submit an Issue at
  * https://github.com/cspray/architectural-decision.
+ *
+ * @date 2022-07-19
+ * @status Accepted
+ * @author Charles Sprayberry
  */
 #[Attribute(Attribute::TARGET_CLASS)]
-final class PreferCustomArchitecturalDecisionOverGeneric extends DocBlockArchitecturalDecision {
-
-    public function __construct() {
-        parent::__construct(
-            new DateTimeImmutable('2022-07-19', new \DateTimeZone('America/New_York')),
-            DecisionStatus::accepted(),
-            [DecisionAuthor::fromName('Charles Sprayberry')]
-        );
-    }
-
-}
+final class PreferCustomArchitecturalDecisionOverGeneric extends DocBlockArchitecturalDecision {}

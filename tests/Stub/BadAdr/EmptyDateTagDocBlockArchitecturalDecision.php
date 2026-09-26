@@ -3,10 +3,16 @@
 namespace Cspray\ArchitecturalDecision\Stub\BadAdr;
 
 use Attribute;
-use Cspray\ArchitecturalDecision\DecisionAuthor;
-use Cspray\ArchitecturalDecision\DecisionStatus;
 use Cspray\ArchitecturalDecision\DocBlock\DocBlockArchitecturalDecision;
-use DateTimeImmutable;
 
+/**
+ * ADR contents
+ *
+ * @date
+ * @status Draft
+ * @author Charles Sprayberry
+ */
 #[Attribute(Attribute::TARGET_ALL)]
-final class MissingDocBlockArchitecturalDecision extends DocBlockArchitecturalDecision {}
+final class EmptyDateTagDocBlockArchitecturalDecision extends DocBlockArchitecturalDecision {
+
+}
