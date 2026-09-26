@@ -5,6 +5,7 @@ namespace Cspray\ArchitecturalDecision\DocBlock;
 use ArrayAccess;
 use Countable;
 use IteratorAggregate;
+use Override;
 use Traversable;
 
 /**
@@ -31,10 +32,12 @@ final readonly class Tags implements Countable, IteratorAggregate {
         return $this->tags[$name] ?? null;
     }
 
+    #[Override]
     public function getIterator() : Traversable {
         yield from $this->tags;
     }
 
+    #[Override]
     public function count() : int {
         return count($this->tags);
     }
