@@ -33,10 +33,10 @@ final readonly class ArchitecturalDecisionRecordCollection implements IteratorAg
         $clean = [];
         while ($records !== []) {
             $record = array_shift($records);
-            $recordFound = array_any(
+            $recordFound = array_filter(
                 $records,
                 static fn(ArchitecturalDecisionRecord $r) => $r->id()->equals($record->id())
-            );
+            ) !== [];
             if ($recordFound) {
                 throw DuplicateArchitecturalDecisionRecord::fromAdrWithDecisionIdAlreadyAddedToCollection($record);
             }
